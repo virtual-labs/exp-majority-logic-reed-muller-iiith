@@ -111,21 +111,20 @@
         <div class="column is-8-desktop is-12-tablet is-12-mobile">
             <div class="box-question">
                 <section id="majorityQuestion">
-                    <p>For the monomial <span id="monomial"></span>, enter the <span id="numSubvectors"></span>
-                        sub-codeword sums :</p>
+                    <p>Enter the coefficient of the given monomial. </p>
                     <div class="columns is-centered">
                         <div class="column is-11-desktop is-12-tablet is-12-mobile">
                             <!-- <h2>Reed-Muller Majority Decoder</h2> -->
                             <div id="decodingStatus">
-                                <p>\(\mathbf(y')\): <span id="receivedVector"></span></p>
+                                <p>Current vector: \(\mathbf(y')\): <span id="currentVector"></span></p>
                                 <p id="currentDegree"></p>
                                 <p>Current Monomial: <span id="currentMonomial"></span></p>
                             </div>
 
                             <div id="decoding-step">
                                 <p>What is the majority value for the current monomial?</p>
-                                <button class="v-button" onclick="majorityLogic(0)">0</button>
-                                <button class="v-button" onclick="majorityLogic(1)">1</button>
+                                <button class="v-button">0</button>
+                                <button class="v-button">1</button>
                             </div>
 
                             <!-- <div id="feedback"></div> -->
