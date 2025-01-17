@@ -1,1 +1,1 @@
-## Experiment name
+## Majority Logic Decoding of Reed-Muller Codes
