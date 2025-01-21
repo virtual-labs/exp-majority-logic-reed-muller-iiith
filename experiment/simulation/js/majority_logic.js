@@ -254,6 +254,8 @@ function checkMajorityDecision(userDecision) {
             updateCurrentFunction(currentMonomial);
         }
 
+        console.log('Decoded coefficients:', decodedCoefficients);
+
         // Move to next step
         currentStep++;
         if (currentStep >= monomials.length) {
@@ -297,8 +299,8 @@ function updateUI() {
     const currentMonomialEl = document.getElementById('currentMonomial');
     const decodedPolynomialEl = document.getElementById('decodedPolynomial');
 
-    if (receivedVectorEl) receivedVectorEl.innerHTML = `(${receivedVector.join(',')})`;
-    if (currentVector) currentVectorEl.innerHTML = `(${currentVector.join(',')})`;
+    if (receivedVectorEl) receivedVectorEl.innerHTML = ` \\( \\mathbf{r} = (${receivedVector.join(',')})\\)`;
+    if (currentVector) currentVectorEl.innerHTML = `\\(\\mathbf{y'} = (${currentVector.join(',')}) \\)`;
     if (currentDegreeEl) currentDegreeEl.innerHTML = `Current Degree: ${currentDegree}`;
     if (currentMonomialEl) currentMonomialEl.innerHTML = formatMonomial(currentMonomial);
     if (decodedPolynomialEl) decodedPolynomialEl.innerHTML = formatDecodedPolynomial();

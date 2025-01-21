@@ -151,7 +151,7 @@ function initializeMajorityDecoder() {
     currentMonomial = generateRandomMonomial(degree);
     currentReceivedVector = generateReedMullerCodeword(maxDegree, numVariables);
 
-    document.getElementById('codeword').textContent = `\\( (${currentReceivedVector.join('')}) \\)`;
+    document.getElementById('codeword').textContent = `\\( \\mathbf{c}= (${currentReceivedVector.join('')}) \\)`;
 
     // Use interactive codeword display instead of text
     createInteractiveCodeword(currentReceivedVector, 'receivedVector');
