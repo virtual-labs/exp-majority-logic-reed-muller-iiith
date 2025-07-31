@@ -150,6 +150,9 @@ function initializeMajorityDecoder() {
     numSubvectors = 2 ** (numVariables - degree);
     currentMonomial = generateRandomMonomial(degree);
     currentReceivedVector = generateReedMullerCodeword(maxDegree, numVariables);
+    const rmPara = document.getElementById('rmPara');
+    
+    rmPara.innerHTML = `\\( RM(${degree}, ${numVariables}) \\)`;
 
     document.getElementById('codeword').textContent = `\\( \\mathbf{c}= (${currentReceivedVector.join('')}) \\)`;
 
