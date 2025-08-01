@@ -53,7 +53,7 @@
 				<div class="v-content" style="text-align: left; padding-left: 10%; padding-right: 10%;">
 					<ul style="list-style: disc;">
 						<b>Quick theory overview:</b>
-						<li>
+						<!-- <li>
 							<strong>The conditional distribution of AWGN Channel is given by:</strong>
 							<br>
 							<p style="text-align: center;">\( p(\boldsymbol{y}|\boldsymbol{x})=\frac{1}{(\pi
@@ -64,7 +64,8 @@
 								C}}\max\frac{1}{(\pi
 								N_0)^{n/2}}e^{-\frac{(||\boldsymbol{y}-\boldsymbol{x}||^2)}{N_0}}=arg_{\boldsymbol{x}\in{\cal
 								C}}\max\langle\boldsymbol{y},\boldsymbol{x}\rangle\)</p>
-						</li>
+						</li> -->
+						
 					</ul>
 					<br>
 					<ul style="list-style: disc;">
@@ -72,22 +73,21 @@
 						<b>Procedure:</b>
 
 						<li>
-							<strong>Step 1:</strong> Enter the likelihoods of \(\boldsymbol{y}\) given codewords and
-							click on the
-							"Check" button to verify the likelihoods.
+							<strong>Step 1:</strong> Select the bits of the codeword by clicking on the bits. After selecting
+							the bits, click on the "Check" button to check if the selected bits are correct.
 						</li>
 						<li>
-							<strong>Step 2:</strong> Select the maximum likelihood estimate codeword from the
-							dropdown.
+							<strong>Step 2:</strong> If the selected bits are correct, the "Next" button will appear and observation section
+							will say it is correct. If the selected bits are not correct, the observation section
+							will say it is wrong and you can try again. 
 						</li>
 						<li>
-							<strong>Step 3:</strong> Click on "Yes" if the maximum likelihood estimate codeword is same
-							as the transmitted codeword, else click on "No". "Next" button will appear after selecting
-							the correct option.
+							<strong>Step 3:</strong> After clicking on the "Next" button, you can select the next 
+							sub-codeword. Again, click on the "Check" button to check if the selected bits are correct.
+						</li>
 						<li>
-							<strong>Step 4:</strong> After clicking on the "Next" button, the next question will appear.
-							Select all the received vectors that lead to a decoding error when using maximum likelihood
-							decoding.
+							<strong>Step 4:</strong> After selecting all the sub-codewords for the monomial, the observation section will say 
+							all sub-codewords are completed and the "Next" button will be hidden. You can use the "Reset" button to reset the question and start over.
 						</li>
 
 
@@ -101,7 +101,7 @@
 	<div class="columns is-centered">
 		<div class="column is-11-desktop is-12-tablet is-12-mobile">
 			<div class="v-datalist-container components-list" id="questionStatement">
-				<p>Consider a codeword,
+				<p>Consider a codeword, 
 					<span id="codeword"></span>
 				</p>
 				from the <span id="rmPara" class="has-text-centered is-size-5"></span> code.

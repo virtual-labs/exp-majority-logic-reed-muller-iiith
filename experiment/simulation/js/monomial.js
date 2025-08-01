@@ -163,7 +163,7 @@ function initializeMajorityDecoder() {
 
     rmPara.innerHTML = `\\( RM(${degree}, ${numVariables}) \\)`;
 
-    document.getElementById('codeword').textContent = `\\( \\mathbf{c}= (${currentReceivedVector.join('')}) \\)`;
+    document.getElementById('codeword').textContent = `\\( \\mathbf{c}= (${currentReceivedVector.join(',')}) \\)`;
 
     // Use interactive codeword display instead of text
     createInteractiveCodeword(currentReceivedVector, 'receivedVector');
