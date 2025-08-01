@@ -6,10 +6,18 @@ let degree = 0; // Degree of the current monomial
 let numSubvectors = 2 ** (numVariables - maxDegree); // Number of subvectors for majority decoding
 let currentReceivedVector = [];
 let selectedVector = [];
+let correctSubcode = [];
 let currentMonomial = [];
 let currentPolynomial = [];
 let correctSubcodewordSums = [];
 let correctMajorityResult = 0;
+let nextFlagClicked = false; // Flag to track if the next button has been clicked
+
+
+// color pallette 
+
+const colorPallete = ['#3273dc', '#23d160', '#ffdd57', '#ff3860', '#7950f2', '#20c997', '#fd7e14'];
+let subcodeColorIdx = 0;
 
 // Function to evaluate a Boolean polynomial on all inputs
 function evaluatePolynomial(polynomial, inputs) {
@@ -103,13 +111,14 @@ function createInteractiveCodeword(codeword, containerId) {
         bitElement.textContent = currentReceivedVector[index];
 
         selectedVector[index] = 0;
+        correctSubcode[index] = 0;
 
         updateBitDisplay(bitElement, 0);
 
         bitElement.onclick = () => {
             // currentReceivedVector[index] = currentReceivedVector[index] === 0 ? 1 : 0;
             selectedVector[index] = selectedVector[index] === 0 ? 1 : 0;
-            updateBitDisplay(bitElement, selectedVector[index]);
+            updateBitDisplay(bitElement, selectedVector[index], correctSubcode[index]);
             correctSubcodewordSums = generateSubcodewordSums(currentReceivedVector);
         };
 
@@ -118,10 +127,10 @@ function createInteractiveCodeword(codeword, containerId) {
 }
 
 // Helper function to update bit display
-function updateBitDisplay(element, value) {
+function updateBitDisplay(element, value, correctSubcode) {
     // element.textContent = value;
     if (value === 1) {
-        element.style.backgroundColor = '#3273dc';
+        element.style.backgroundColor = colorPallete[subcodeColorIdx]
         element.style.color = 'white';
     } else {
         element.style.backgroundColor = '#f5f5f5';
@@ -149,9 +158,9 @@ function initializeMajorityDecoder() {
     degree = Math.floor(Math.random() * (maxDegree + 1));
     numSubvectors = 2 ** (numVariables - degree);
     currentMonomial = generateRandomMonomial(degree);
-    currentReceivedVector = generateReedMullerCodeword(maxDegree, numVariables);
+    currentReceivedVector = generateReedMullerCodeword(degree, numVariables);
     const rmPara = document.getElementById('rmPara');
-    
+
     rmPara.innerHTML = `\\( RM(${degree}, ${numVariables}) \\)`;
 
     document.getElementById('codeword').textContent = `\\( \\mathbf{c}= (${currentReceivedVector.join('')}) \\)`;
@@ -195,6 +204,8 @@ function checkSubcode() {
     const nextButton = document.getElementById('nextButton');
     const subcodewords = getSubcodeIndices(currentMonomial);
 
+    console.log("subcodewords:", subcodewords);
+
     // convert selectedVector to index 
     let selectedVectorIndices = selectedVector.map((bit, idx) => bit === 1 ? idx : -1).filter(idx => idx !== -1);
 
@@ -220,12 +231,26 @@ function checkSubcode() {
     const tryAgainPrompt = "Incorrect. Please try again.";
     const wrongAgainPrompt = "You have selected a wrong subcodeword again. Please try again.";
 
-    if (allCorrect) {
+    if (allCorrect && nextFlagClicked === false) {
         observations.innerHTML = correctPrompt;
         observations.style.color = "green";
-        document.getElementById('majorityResult').textContent = correctMajorityResult;
+        // document.getElementById('majorityResult').textContent = correctMajorityResult;
         nextButton.style.display = 'inline-block';
-    } else if (observations.innerHTML === tryAgainPrompt) {
+
+        // freeze the subcode indices by add them to correctSubcode
+        correctSubcode.push(...selectedVectorIndices);
+        console.log("Correct subcode:", correctSubcode);
+
+        // flag for keeping track if next button is clicked
+        nextFlagClicked = true;
+
+    }
+    else if (allCorrect && nextFlagClicked === true) {
+        observations.innerHTML = "You have already selected a correct subcodeword. Please click 'Next' to proceed.";
+        observations.style.color = "blue";
+        nextButton.style.display = 'inline-block';
+    }
+    else if (observations.innerHTML === tryAgainPrompt) {
         observations.innerHTML = wrongAgainPrompt;
         observations.style.color = "red";
         nextButton.style.display = 'none';
@@ -250,10 +275,29 @@ function resetMajorityDecoder() {
 }
 
 
-function nextMajorityQuestion() {
-    resetMajorityDecoder();
-    initializeMajorityDecoder();
+function nextSubcode() {
+    // resetMajorityDecoder();
+    // initializeMajorityDecoder();
+
+    subcodeColorIdx = (subcodeColorIdx + 1);
+    nextFlagClicked = false; // Reset the flag for next subcode
+
+    // remove the previous subcode indices from selectedVector
+    selectedVector.forEach((_, idx) => {
+        selectedVector[idx] = 0;
+    });
+    document.getElementById('nextButton').style.display = 'none';
+
+    if (subcodeColorIdx === numSubvectors - 1) {
+        document.getElementById('observation').textContent = "You have completed all subcodes for this monomial.";
+        document.getElementById('observation').style.color = "green";
+        document.getElementById('nextButton').style.display = 'none';
+        document.getElementById('checkButton').style.display = 'none';
+    }
+
 }
+
+
 // Helper function to convert index to binary vector
 function indexToBinaryVector(index, numVars) {
     return index.toString(2).padStart(numVars, '0').split('').map(Number);
