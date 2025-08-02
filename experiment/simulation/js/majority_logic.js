@@ -298,6 +298,9 @@ function updateUI() {
     const currentDegreeEl = document.getElementById('currentDegree');
     const currentMonomialEl = document.getElementById('currentMonomial');
     const decodedPolynomialEl = document.getElementById('decodedPolynomial');
+    const rmParaEl = document.getElementById('rmPara');
+
+    rmParaEl.innerHTML = `\\( RM(${currentDegree}, ${numVariables}) \\)`;
 
     if (receivedVectorEl) receivedVectorEl.innerHTML = ` \\( \\mathbf{r} = (${receivedVector.join(',')})\\)`;
     if (currentVector) currentVectorEl.innerHTML = `\\(\\mathbf{y'} = (${currentVector.join(',')}) \\)`;
