@@ -3,3 +3,4 @@ build
 plugins
 package-lock.json
 package.json
+.vscode

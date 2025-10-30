@@ -16,7 +16,24 @@ let nextFlagClicked = false; // Flag to track if the next button has been clicke
 
 // color pallette 
 
-const colorPallete = ['#3273dc', '#23d160', '#ffdd57', '#ff3860', '#7950f2', '#20c997', '#fd7e14'];
+const colorPallete = [
+    '#3273dc',
+    '#23d160',
+    '#ffdd57',
+    '#ff3860',
+    '#7950f2',
+    '#20c997',
+    '#fd7e14',
+    '#00d1b2',
+    '#6f42c1',
+    '#f03a5f',
+    '#0047ab',
+    '#6c757d',
+    '#9c1a1f',
+    '#1e7e34',
+    '#a333c8',  
+    '#363636'
+  ];
 let subcodeColorIdx = 0;
 
 // Function to evaluate a Boolean polynomial on all inputs
