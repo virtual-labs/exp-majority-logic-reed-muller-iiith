@@ -2,38 +2,89 @@
   "version": 2.0,
   "questions": [
     {
-      "question": "This is a Sample Question 1?",
+      "question": "Let $f(x_1, x_2) = x_1x_2 + x_2$ be a Boolean polynomial over $\\mathbb{F}_2$. What is $f(1, 0)$?",
       "answers": {
-        "a": "answer1",
-        "b": "answer2",
-        "c": "answer3",
-        "d": "answer4"
+        "a": "0",
+        "b": "1",
+        "c": "2",
+        "d": "$x_1$"
       },
       "explanations": {
-        "a": "Explanation 1  <a href='www.google.com'>here</a>",
-        "b": "Explanation 2",
-        "c": "Explanation 2",
-        "d": "Explanation 2"
+        "a": "Correct. Substituting $(x_1, x_2) = (1, 0)$ gives $f(1,0) = 1\\cdot0 + 0 = 0$",
+        "b": "Incorrect. Substituting $(x_1, x_2) = (1, 0)$ gives $f(1,0) = 1\\cdot0 + 0 = 0$.",
+        "c": "Incorrect. There is no 2 in $\\mathbb{F}_2$; computations are only modulo 2.",
+        "d": "Incorrect. After substituting, the result must be a number (0 or 1), not a variable."
       },
       "correctAnswer": "a",
       "difficulty": "beginner"
     },
     {
-      "question": "This is a Sample Question 2?",
+      "question": "Which of the following best explains why the generator matrix of $RM(1, m)$ has rank $m + 1$?",
       "answers": {
-        "a": "answer1",
-        "b": "answer2",
-        "c": "answer3",
-        "d": "answer4"
+        "a": "Because there are $m$ linearly independent monomials of degree 1 and one constant term.",
+        "b": "Because there are $2^m$ possible evaluation points.",
+        "c": "Because each codeword is orthogonal to its complement.",
+        "d": "Because $RM(1,m)$ is self-dual."
       },
       "explanations": {
-        "a": "Explanation 1  <a href='www.google.com'>here</a>",
-        "b": "Explanation 2",
-        "c": "Explanation 2",
-        "d": "Explanation 2"
+        "a": "Correct. The basis consists of $1, x_1, x_2, \\dots, x_m$, which are linearly independent over $\\mathbb{F}_2$.",
+        "b": "Incorrect. The number of evaluation points determines code length, not rank.",
+        "c": "Incorrect. Orthogonality is relevant to the dual code, not to rank computation.",
+        "d": "Incorrect. $RM(1,m)$ is not self-dual except in trivial cases."
+      },
+      "correctAnswer": "a",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "Let $RM(2,3)$ denote the second-order Reed–Muller code of length 8. Which of the following is *not* a basis monomial of this code?",
+      "answers": {
+        "a": "$x_1x_2$",
+        "b": "$x_2x_3$",
+        "c": "$x_1x_2x_3$",
+        "d": "$x_1$"
+      },
+      "explanations": {
+        "a": "Incorrect. Degree 2 monomials like $x_1x_2$ are included since the order is 2.",
+        "b": "Incorrect. This is also degree 2, so it belongs.",
+        "c": "Correct. $x_1x_2x_3$ has degree 3, which exceeds 2 and hence is excluded.",
+        "d": "Incorrect. Linear terms are always included."
       },
       "correctAnswer": "c",
-      "difficulty": "beginner"
-    }
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "If a codeword of $RM(2,4)$ is obtained by evaluating $f(x_1,x_2,x_3,x_4) = x_1x_2 + x_3x_4 + 1$, how many coordinates equal 1 in this codeword?",
+      "answers": {
+        "a": "4",
+        "b": "6",
+        "c": "8",
+        "d": "10"
+      },
+      "explanations": {
+        "a": "Incorrect. That’s too few. It is the minimum distance of the code, but not weight of this code.",
+        "b": "Incorrect. Check all 16 input points",
+        "c": "Incorrect. Check all 16 input points",
+        "d": "Correct."
+      },
+      "correctAnswer": "d",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "A specific Reed-Muller code $C = RM(r, 5)$ is known to have a minimum distance $d_{min} = 8$. What is the order $r$ of this code?",
+      "answers": {
+        "a": "$r = 1$",
+        "b": "$r = 2$",
+        "c": "$r = 3$",
+        "d": "$r = 4$"
+      },
+      "explanations": {
+      "a": "Incorrect. If $r=1$, the minimum distance would be $2^{5-1} = 16$.",
+      "b": "Correct. The minimum distance of $RM(r, m)$ is $2^{m-r}$. We solve $2^{5-r} = 8 = 2^3$, which implies $5-r=3$, so $r=2$.",
+      "c": "Incorrect. If $r=3$, the minimum distance would be $2^{5-3} = 4$.",
+      "d": "Incorrect. If $r=4$, the minimum distance would be $2^{5-4} = 2$."
+      },
+      "correctAnswer": "b",
+      "difficulty": "intermediate"
+     }
   ]
 }
