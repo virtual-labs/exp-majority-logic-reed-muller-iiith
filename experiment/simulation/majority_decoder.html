@@ -17,6 +17,19 @@
         src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
     <!-- Load d3.js -->
     <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+
+    <style>
+        input[type="radio"] {
+            margin: 0 5px;
+            accent-color: #3273dc; /* Primary color */
+            transform: scale(1.2); /* Slightly larger size */
+        }
+
+        label {
+            margin-right: 15px;
+            font-weight: bold;
+        }
+    </style>
 </head>
 
 <body>
@@ -118,23 +131,36 @@
                             <!-- <h2>Reed-Muller Majority Decoder</h2> -->
                             <div id="decodingStatus">
                                 <p>Current vector: <span id="currentVector"></span></p>
-                                <p id="currentDegree"></p>
+                                <!-- <p id="currentDegree"></p> -->
                                 <p>Current Monomial: <span id="currentMonomial"></span></p>
                             </div>
-
-                            <div id="decoding-step">
-                                <p>What is the majority value for the current monomial?</p>
-                                <button class="v-button">0</button>
-                                <button class="v-button">1</button>
+                            <div class="current-polynomial">
+                                <p>Current Decoded Polynomial: <span id="decodedPolynomial"></span></p>
                             </div>
 
+                            <!-- <div id="decoding-step">
+                                <p>As per the majority logic algorithm, what is the estimate for the coefficient of the current monomial above?</p>
+                                <button class="v-button">0</button>
+                                <button class="v-button">1</button>
+                            </div> -->
+
+
+                            <div id="decoding-step">
+                                <p>As per the majority logic algorithm, what is the estimate for the coefficient of the current monomial above?</p>
+                            
+                                <input type="radio" id="choice0" name="majority_choice" value="0">
+                                <label for="choice0">0</label>
+                                <input type="radio" id="choice1" name="majority_choice" value="1">
+                                <label for="choice1">1</label>
+                            
+                                <br>
+                                <button class="v-button" id="submitDecision">Submit</button>
+                                <button class="v-button" id="resetButton">Reset</button>
+                            </div>
                             <!-- <div id="feedback"></div> -->
 
                             <!-- <div id="subcodewordSums"></div> -->
 
-                            <div class="current-polynomial">
-                                <p>Current Decoded Polynomial: <span id="decodedPolynomial"></span></p>
-                            </div>
 
                             <div id="finalResult"></div>
                         </div>

@@ -17,11 +17,16 @@ document.addEventListener('DOMContentLoaded', function () {
     initializeDecoderSimulation();
 
     // Add click event listeners to buttons
-    document.querySelectorAll('#decoding-step button').forEach(button => {
-        button.addEventListener('click', function () {
-            checkMajorityDecision(parseInt(this.textContent));
-        });
-    });
+    // document.querySelectorAll('#decoding-step button').forEach(button => {
+    //     button.addEventListener('click', function () {
+    //         checkMajorityDecision(parseInt(this.textContent));
+    //     });
+    // });
+});
+
+// Add event listener for reset button
+document.getElementById('resetButton').addEventListener('click', function () {
+    location.reload();
 });
 
 // Function to evaluate a Boolean polynomial on all inputs
@@ -234,6 +239,20 @@ function updateCurrentFunction(monomial) {
     console.log('evalMonomial:', evalMonomial);
 }
 
+document.getElementById('submitDecision').addEventListener('click', function () {
+    // 1. Get the selected value
+    const selectedRadio = document.querySelector('input[name="majority_choice"]:checked');
+
+    if (selectedRadio) {
+        // const userDecision = parseInt(selectedRadio.value);
+        // 2. Call the existing check function with the selected value
+        checkMajorityDecision(selectedRadio.value);
+    } else {
+        // Handle case where no choice is made
+        alert("Please select a coefficient (0 or 1).");
+    }
+});
+
 // Function to handle user's majority decision
 function checkMajorityDecision(userDecision) {
     const monomials = generateMonomials(currentDegree, numVariables);
@@ -245,7 +264,13 @@ function checkMajorityDecision(userDecision) {
     const incorrectPrompt = `No, you have selected the wrong majority for the subcodeword sums for the monomial ${formatMonomial(currentMonomial)}.`;
     const repeatPrompt = `Please try again!`;
 
+    console.log('User decision:', parseInt(userDecision));
+    console.log('Correct majority:', correctMajority);
+
     if (parseInt(userDecision) === correctMajority) {
+
+        console.log('User decision is correct.');
+
         // Update decoded coefficients
         decodedCoefficients.set(currentMonomial.join(','), correctMajority);
 
@@ -261,14 +286,17 @@ function checkMajorityDecision(userDecision) {
         if (currentStep >= monomials.length) {
             currentDegree--;
             currentStep = 0;
-            if (currentDegree < 0) {
-                displayFinalResults();
-                return;
-            }
         }
 
         observation.innerHTML = correctPrompt;
         observation.style.color = 'green';
+
+        updateUI();
+
+        if (currentDegree < 0) {
+            displayFinalResults();
+            return;
+        }
 
     } else {
         if (observation.innerHTML === incorrectPrompt) {
@@ -381,6 +409,7 @@ function getSubcodeIndices(monomial) {
 
     return subcodeIndices;
 }
+
 
 // // Modified displaySubcodewordSums function
 // function displaySubcodewordSums(monomial) {
