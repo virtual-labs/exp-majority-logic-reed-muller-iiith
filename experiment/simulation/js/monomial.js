@@ -284,12 +284,22 @@ function resetMajorityDecoder() {
     correctSubcodewordSums = [];
     correctMajorityResult = 0;
     document.getElementById('observation').textContent = '';
-    // document.getElementById('majorityResult').textContent = '';
     document.getElementById('nextButton').style.display = 'none';
 
-    initializeMajorityDecoder();
-
+    // Clear the interactive codeword display
+    const container = document.getElementById('receivedVector');
+    if (container) {
+        Array.from(container.children).forEach((bitElement, index) => {
+            selectedVector[index] = 0;
+            updateBitDisplay(bitElement, 0, correctSubcode[index]);
+        });
+    }
 }
+
+document.getElementById('reloadButton').addEventListener('click', function () {
+    location.reload();
+});
+
 
 
 function nextSubcode() {
