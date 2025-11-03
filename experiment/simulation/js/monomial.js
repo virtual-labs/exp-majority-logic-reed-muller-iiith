@@ -244,9 +244,9 @@ function checkSubcode() {
     console.log(subcodewords);
     console.log(selectedVectorIndices);
 
-    const correctPrompt = "Correct! You have selected a correct subcodeword.";
-    const tryAgainPrompt = "Incorrect. Please try again.";
-    const wrongAgainPrompt = "You have selected a wrong subcodeword again. Please try again.";
+    const correctPrompt = "Correct! You have selected a correct check set. Press 'Next' now to go on to find the next check set.";
+    const tryAgainPrompt = "Incorrect check set. Please try again. Remember that, for the given monomial, the check set chosen should be corresponding to a set of coordinates in which the variables not appearing in the monomial are fixed to be specific values.";
+    const wrongAgainPrompt = "You have selected a wrong check set again. Please try again.";
 
     if (allCorrect && nextFlagClicked === false) {
         observations.innerHTML = correctPrompt;
@@ -316,7 +316,7 @@ function nextSubcode() {
     document.getElementById('nextButton').style.display = 'none';
 
     if (subcodeColorIdx === numSubvectors - 1) {
-        document.getElementById('observation').textContent = "You have completed all subcodes for this monomial.";
+        document.getElementById('observation').textContent = "This part of the experiment is over! You have completed finding all check-sums for this monomial. (You didn't have to select the last one, as that is the only one that's left!)";
         document.getElementById('observation').style.color = "green";
         document.getElementById('nextButton').style.display = 'none';
         document.getElementById('checkButton').style.display = 'none';

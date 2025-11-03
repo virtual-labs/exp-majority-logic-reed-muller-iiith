@@ -98,7 +98,7 @@
             <div class="v-datalist-container components-list" id="questionStatement">
                 <p>Consider a received vector :
                 <span id="receivedVector" class="has-text-centered is-size-5"></span> </p> 
-                &nbsp; from the &nbsp; <span id="rmPara" class="has-text-centered is-size-5"></span> &nbsp; code.
+                &nbsp; from the code &nbsp; <span id="rmPara" class="has-text-centered is-size-5"></span> &nbsp; Follow the instructions below to carry through the complete majority logic decoding process, by estimating the coefficients of the monomials, from the largest degree to the smallest, thus estimating the message polynomial.
             </div>
         </div>
     </div>
@@ -107,14 +107,14 @@
         <div class="column is-8-desktop is-12-tablet is-12-mobile">
             <div class="box-question">
                 <section id="majorityQuestion">
-                    <p>Enter the coefficient of the given monomial. </p>
+                    <p> As part of simulating the decoder, you have to estimate the coefficient of the monomial  <span id="currentMonomial"></span> at this point. The input to the decoder (i.e. the current working vector upto this point) is given, as well as the current partially decoded message polynomial is given below. </p>
                     <div class="columns is-centered">
                         <div class="column is-11-desktop is-12-tablet is-12-mobile">
                             <!-- <h2>Reed-Muller Majority Decoder</h2> -->
                             <div id="decodingStatus">
                                 <p>Current vector: <span id="currentVector"></span></p>
                                 <!-- <p id="currentDegree"></p> -->
-                                <p>Current Monomial: <span id="currentMonomial"></span></p>
+                                <!-- <p>Current Monomial: <span id="currentMonomial"></span></p> -->
                             </div>
                             <div class="current-polynomial">
                                 <p>Current Decoded Polynomial: <span id="decodedPolynomial"></span></p>

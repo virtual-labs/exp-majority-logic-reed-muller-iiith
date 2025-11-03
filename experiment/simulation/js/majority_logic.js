@@ -261,7 +261,7 @@ function checkMajorityDecision(userDecision) {
     const observation = document.getElementById('observation');
 
     const correctPrompt = `Yes, the majority of the subcodeword sums for the monomial ${formatMonomial(currentMonomial)} is ${correctMajority}.`;
-    const incorrectPrompt = `No, you have selected the wrong majority for the subcodeword sums for the monomial ${formatMonomial(currentMonomial)}.`;
+    const incorrectPrompt = `No, you have selected the wrong majority for the subcodeword sums (a subcodeword sum is a sum of bits of each check set) for the monomial ${formatMonomial(currentMonomial)}. Try again, if necessary, study the theory part and repeat part-1 of this experiment once more, before trying again.`;
     const repeatPrompt = `Please try again!`;
 
     console.log('User decision:', parseInt(userDecision));
