@@ -2,16 +2,16 @@
   "version": 2.0,
   "questions": [
     {
-      "question": "Let $f(x_1, x_2) = x_1x_2 + x_2$ be a Boolean polynomial over $\\mathbb{F}_2$. What is $f(1, 0)$?",
+      "question": "Let $f(X_1, X_2) = X_1X_2 + X_2$ be a Boolean polynomial over $\\mathbb{F}_2$. What is $f(1, 0)$?",
       "answers": {
         "a": "0",
         "b": "1",
         "c": "2",
-        "d": "$x_1$"
+        "d": "$X_1$"
       },
       "explanations": {
-        "a": "Correct. Substituting $(x_1, x_2) = (1, 0)$ gives $f(1,0) = 1\\cdot0 + 0 = 0$",
-        "b": "Incorrect. Substituting $(x_1, x_2) = (1, 0)$ gives $f(1,0) = 1\\cdot0 + 0 = 0$.",
+        "a": "Correct. Substituting $(X_1, X_2) = (1, 0)$ gives $f(1,0) = 1\\cdot0 + 0 = 0$",
+        "b": "Incorrect. Substituting $(X_1, X_2) = (1, 0)$ gives $f(1,0) = 1\\cdot0 + 0 = 0$.",
         "c": "Incorrect. There is no 2 in $\\mathbb{F}_2$; computations are only modulo 2.",
         "d": "Incorrect. After substituting, the result must be a number (0 or 1), not a variable."
       },
@@ -27,7 +27,7 @@
         "d": "Because $RM(1,m)$ is self-dual."
       },
       "explanations": {
-        "a": "Correct. The basis consists of $1, x_1, x_2, \\dots, x_m$, which are linearly independent over $\\mathbb{F}_2$.",
+        "a": "Correct. The basis consists of $1, X_1, X_2, \\dots, X_m$, which are linearly independent over $\\mathbb{F}_2$.",
         "b": "Incorrect. The number of evaluation points determines code length, not rank.",
         "c": "Incorrect. Orthogonality is relevant to the dual code, not to rank computation.",
         "d": "Incorrect. $RM(1,m)$ is not self-dual except in trivial cases."
@@ -38,22 +38,22 @@
     {
       "question": "Let $RM(2,3)$ denote the second-order Reed–Muller code of length 8. Which of the following is *not* a basis monomial of this code?",
       "answers": {
-        "a": "$x_1x_2$",
-        "b": "$x_2x_3$",
-        "c": "$x_1x_2x_3$",
-        "d": "$x_1$"
+        "a": "$X_1X_2$",
+        "b": "$X_2X_3$",
+        "c": "$X_1X_2X_3$",
+        "d": "$X_1$"
       },
       "explanations": {
-        "a": "Incorrect. Degree 2 monomials like $x_1x_2$ are included since the order is 2.",
+        "a": "Incorrect. Degree 2 monomials like $X_1X_2$ are included since the order is 2.",
         "b": "Incorrect. This is also degree 2, so it belongs.",
-        "c": "Correct. $x_1x_2x_3$ has degree 3, which exceeds 2 and hence is excluded.",
+        "c": "Correct. $X_1X_2X_3$ has degree 3, which exceeds 2 and hence is excluded.",
         "d": "Incorrect. Linear terms are always included."
       },
       "correctAnswer": "c",
       "difficulty": "intermediate"
     },
     {
-      "question": "If a codeword of $RM(2,4)$ is obtained by evaluating $f(x_1,x_2,x_3,x_4) = x_1x_2 + x_3x_4 + 1$, how many coordinates equal 1 in this codeword?",
+      "question": "If a codeword of $RM(2,4)$ is obtained by evaluating $f(X_1,X_2,X_3,X_4) = X_1X_2 + X_3X_4 + 1$, how many coordinates equal 1 in this codeword?",
       "answers": {
         "a": "4",
         "b": "6",
