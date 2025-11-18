@@ -251,14 +251,25 @@ function checkSubcode() {
     if (allCorrect && nextFlagClicked === false) {
         observations.innerHTML = correctPrompt;
         observations.style.color = "green";
-        // document.getElementById('majorityResult').textContent = correctMajorityResult;
         nextButton.style.display = 'inline-block';
 
-        // freeze the subcode indices by add them to correctSubcode
+        // Freeze the subcode indices by adding them to correctSubcode
         correctSubcode.push(...selectedVectorIndices);
         console.log("Correct subcode:", correctSubcode);
 
-        // flag for keeping track if next button is clicked
+        // Disable the buttons for the selected indices
+        const container = document.getElementById('receivedVector');
+        if (container) {
+            selectedVectorIndices.forEach(index => {
+                const bitElement = container.children[index];
+                if (bitElement) {
+                    bitElement.disabled = true; // Disable the button
+                    bitElement.style.cursor = 'not-allowed'; // Change cursor to indicate disabled state
+                }
+            });
+        }
+
+        // Flag for keeping track if next button is clicked
         nextFlagClicked = true;
 
     }
@@ -320,6 +331,8 @@ function nextSubcode() {
         document.getElementById('observation').style.color = "green";
         document.getElementById('nextButton').style.display = 'none';
         document.getElementById('checkButton').style.display = 'none';
+    } else{
+        document.getElementById('observation').textContent = 'Select check set and press \'Check\' to check if it is correct';
     }
 
 }
