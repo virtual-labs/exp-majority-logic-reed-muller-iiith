@@ -297,12 +297,14 @@ function resetMajorityDecoder() {
     document.getElementById('observation').textContent = '';
     document.getElementById('nextButton').style.display = 'none';
 
-    // Clear the interactive codeword display
+    // Clear the interactive codeword display for non-disabled buttons
     const container = document.getElementById('receivedVector');
     if (container) {
         Array.from(container.children).forEach((bitElement, index) => {
-            selectedVector[index] = 0;
-            updateBitDisplay(bitElement, 0, correctSubcode[index]);
+            if (!bitElement.disabled) { // Only clear non-disabled buttons
+                selectedVector[index] = 0;
+                updateBitDisplay(bitElement, 0, correctSubcode[index]);
+            }
         });
     }
 }
