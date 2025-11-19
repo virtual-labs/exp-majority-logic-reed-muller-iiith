@@ -328,7 +328,7 @@ function updateUI() {
     const decodedPolynomialEl = document.getElementById('decodedPolynomial');
     const rmParaEl = document.getElementById('rmPara');
 
-    rmParaEl.innerHTML = `\\( RM(${currentDegree}, ${numVariables}) \\)`;
+    rmParaEl.innerHTML = `\\( RM(${maxDegree}, ${numVariables}) \\)`;
 
     if (receivedVectorEl) receivedVectorEl.innerHTML = ` \\( \\mathbf{r} = (${receivedVector.join(',')})\\)`;
     if (currentVector) currentVectorEl.innerHTML = `\\(\\mathbf{y'} = (${currentVector.join(',')}) \\)`;
@@ -359,7 +359,7 @@ function displayFinalResults() {
     if (finalResultEl) {
         finalResultEl.innerHTML = `
             <h3>Decoding Complete!</h3>
-            <p>Final decoded polynomial: ${formatDecodedPolynomial()}</p>
+            <p style="color:red;">Final decoded polynomial: ${formatDecodedPolynomial()}</p>
         `;
     }
 

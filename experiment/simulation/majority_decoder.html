@@ -107,7 +107,7 @@
         <div class="column is-8-desktop is-12-tablet is-12-mobile">
             <div class="box-question">
                 <section id="majorityQuestion">
-                    <p> As part of simulating the decoder, you have to estimate the coefficient of the monomial  <span id="currentMonomial"></span> at this point. The input to the decoder (i.e. the current working vector upto this point) is given, as well as the current partially decoded message polynomial is given below. </p>
+                    <p> As part of simulating the decoder, you have to estimate the coefficient of the monomial at this point. The input to the decoder (i.e. the current working vector upto this point) is given, as well as the current partially decoded message polynomial is given below. </p>
                     <div class="columns is-centered">
                         <div class="column is-11-desktop is-12-tablet is-12-mobile">
                             <!-- <h2>Reed-Muller Majority Decoder</h2> -->
@@ -117,7 +117,7 @@
                                 <!-- <p>Current Monomial: <span id="currentMonomial"></span></p> -->
                             </div>
                             <div class="current-polynomial">
-                                <p>Current Decoded Polynomial: <span id="decodedPolynomial"></span></p>
+                                <p style="color: red;">Current Decoded Polynomial: <span id="decodedPolynomial" ></span></p>
                             </div>
 
                             <!-- <div id="decoding-step">
@@ -128,7 +128,7 @@
 
 
                             <div id="decoding-step">
-                                <p>As per the majority logic algorithm, what is the estimate for the coefficient of the current monomial above?</p>
+                                <p>As per the majority logic algorithm, what is the estimate for the coefficient of the current monomial : <span id="currentMonomial" style="color: red;"></span></p>
                             
                                 <input type="radio" id="choice0" name="majority_choice" value="0">
                                 <label for="choice0">0</label>
