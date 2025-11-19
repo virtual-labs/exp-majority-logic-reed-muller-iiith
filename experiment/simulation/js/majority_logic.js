@@ -175,7 +175,10 @@ function initializeDecoderSimulation() {
     sentVector = generateReedMullerCodeword(maxDegree, numVariables);
     // flip less than 2^(m-r-1) bits
     // Calculate the number of bits to flip (less than 2^(m-r-1))
-    const numBitsToFlip = Math.floor(Math.random() * (1 << (numVariables - maxDegree - 1)));
+    const numBitsToFlip = 1;
+
+    console.log('Sent vector:', sentVector);
+    console.log('Number of bits to flip:', numBitsToFlip);
 
     // Make a copy of the sentVector and introduce errors
     receivedVector = [...sentVector];
@@ -369,28 +372,77 @@ function displayFinalResults() {
 }
 
 
+// function getSubcodeIndices(monomial) {
+//     const subcodeIndices = [];
+
+//     // For a single variable monomial X_i, we need to partition based on all other variables
+//     // For X4, we should fix variables {1,2,3} in all possible combinations
+//     // const fixedVariables = Array.from({ length: numVariables }, (_, i) => i + 1)
+//     //     .filter(x => !monomial.includes(x));
+
+//     const fixedVariables = monomial;
+
+//     // For X4, with 4 variables total, we should get 2^3 = 8 cosets
+//     // Because we're fixing 3 variables (1,2,3) in all possible combinations
+//     const numCosets = 2 ** fixedVariables.length;
+
+//     // Generate binary patterns for fixed variables
+//     for (let i = 0; i < numCosets; i++) {
+//         let fixedPattern = i.toString(2).padStart(fixedVariables.length, '0').split('').map(Number);
+//         let subvector = [];
+
+//         // Go through all possible input vectors (16 for 4 variables)
+//         for (let inputIdx = 0; inputIdx < 2 ** numVariables; inputIdx++) {
+//             let inputVector = inputIdx.toString(2).padStart(numVariables, '0').split('').map(Number);
+
+//             // Check if this input matches our fixed pattern for variables 1,2,3
+//             let matches = true;
+//             for (let j = 0; j < fixedVariables.length; j++) {
+//                 if (inputVector[fixedVariables[j] - 1] !== fixedPattern[j]) {
+//                     matches = false;
+//                     break;
+//                 }
+//             }
+
+//             if (matches) {
+//                 subvector.push(inputIdx);
+//             }
+//         }
+
+//         subcodeIndices.push(subvector);
+//     }
+
+//     return subcodeIndices;
+// }
+
 function getSubcodeIndices(monomial) {
     const subcodeIndices = [];
+    
+    // FIX: We must fix the variables NOT in the monomial (the complement set).
+    // We sum over the variables IN the monomial.
+    const allVarIndices = Array.from({ length: numVariables }, (_, i) => i + 1);
+    const fixedVariables = allVarIndices.filter(v => !monomial.includes(v));
 
-    // For a single variable monomial X_i, we need to partition based on all other variables
-    // For X4, we should fix variables {1,2,3} in all possible combinations
-    const fixedVariables = Array.from({ length: numVariables }, (_, i) => i + 1)
-        .filter(x => !monomial.includes(x));
-
-    // For X4, with 4 variables total, we should get 2^3 = 8 cosets
-    // Because we're fixing 3 variables (1,2,3) in all possible combinations
+    // Calculate number of voting sets (cosets) based on COMPLEMENT variables
     const numCosets = 2 ** fixedVariables.length;
 
-    // Generate binary patterns for fixed variables
+    // Generate patterns for the fixed variables (The Complement Variables)
     for (let i = 0; i < numCosets; i++) {
-        let fixedPattern = i.toString(2).padStart(fixedVariables.length, '0').split('').map(Number);
+        let fixedPattern = [];
+        for (let bit = 0; bit < fixedVariables.length; bit++) {
+             fixedPattern.push((i >> bit) & 1);
+        }
+
         let subvector = [];
 
-        // Go through all possible input vectors (16 for 4 variables)
+        // Go through all possible input vectors
         for (let inputIdx = 0; inputIdx < 2 ** numVariables; inputIdx++) {
-            let inputVector = inputIdx.toString(2).padStart(numVariables, '0').split('').map(Number);
+            let inputVector = [];
+            for (let v = 0; v < numVariables; v++) {
+                inputVector.push((inputIdx >> v) & 1);
+            }
 
-            // Check if this input matches our fixed pattern for variables 1,2,3
+            // Check if this input matches our fixed pattern for the COMPLEMENT variables
             let matches = true;
             for (let j = 0; j < fixedVariables.length; j++) {
                 if (inputVector[fixedVariables[j] - 1] !== fixedPattern[j]) {
@@ -403,13 +455,11 @@ function getSubcodeIndices(monomial) {
                 subvector.push(inputIdx);
             }
         }
-
         subcodeIndices.push(subvector);
     }
 
     return subcodeIndices;
 }
-
 
 // // Modified displaySubcodewordSums function
 // function displaySubcodewordSums(monomial) {
