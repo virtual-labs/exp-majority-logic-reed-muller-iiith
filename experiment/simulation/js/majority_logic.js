@@ -50,20 +50,22 @@ function evaluatePolynomial(polynomial, inputs) {
     return codeword;
 }
 
-// Function to generate all possible inputs
+// THE CORRECTED VERSION Update Nov 20
 function generateAllInputs(numVars) {
     const inputs = [];
     const total = 2 ** numVars;
 
     for (let i = 0; i < total; i++) {
         const input = [];
-        for (let j = 0; j < numVars; j++) {
+        // Loop backwards from MSB (j=3) to LSB (j=0)
+        for (let j = numVars - 1; j >= 0; j--) { 
             input.push((i >> j) & 1);
         }
         inputs.push(input);
     }
     return inputs;
 }
+
 
 // Function to evaluate monomial for a given input vector
 function evaluateMonomial(monomial, input) {
@@ -415,37 +417,38 @@ function displayFinalResults() {
 //     return subcodeIndices;
 // }
 
+//Update below on 20th Nov
 function getSubcodeIndices(monomial) {
     const subcodeIndices = [];
     
-    // FIX: We must fix the variables NOT in the monomial (the complement set).
-    // We sum over the variables IN the monomial.
+    // This part is correct: identify the variables to fix.
     const allVarIndices = Array.from({ length: numVariables }, (_, i) => i + 1);
     const fixedVariables = allVarIndices.filter(v => !monomial.includes(v));
 
-    // Calculate number of voting sets (cosets) based on COMPLEMENT variables
     const numCosets = 2 ** fixedVariables.length;
 
-    // Generate patterns for the fixed variables (The Complement Variables)
+    // Loop through all possible assignments for the fixed variables.
     for (let i = 0; i < numCosets; i++) {
-        let fixedPattern = [];
-        for (let bit = 0; bit < fixedVariables.length; bit++) {
-             fixedPattern.push((i >> bit) & 1);
-        }
-
         let subvector = [];
 
-        // Go through all possible input vectors
-        for (let inputIdx = 0; inputIdx < 2 ** numVariables; inputIdx++) {
-            let inputVector = [];
-            for (let v = 0; v < numVariables; v++) {
-                inputVector.push((inputIdx >> v) & 1);
-            }
-
-            // Check if this input matches our fixed pattern for the COMPLEMENT variables
+        // Go through all 16 possible input vectors
+        for (let inputIdx = 0; inputIdx < codeLength; inputIdx++) {
+            
+            // This is the crucial check.
             let matches = true;
             for (let j = 0; j < fixedVariables.length; j++) {
-                if (inputVector[fixedVariables[j] - 1] !== fixedPattern[j]) {
+                // Get the variable we are currently fixing (e.g., 1, 2, or 4)
+                const variable = fixedVariables[j]; 
+                
+                // Get the value of that variable for the current inputIdx
+                // Note: (numVariables - variable) correctly maps X_1 to MSB, X_4 to LSB
+                const inputBitForVar = (inputIdx >> (numVariables - variable)) & 1;
+
+                // Get the required value for this variable from our counter 'i'
+                // The j-th bit of 'i' corresponds to the j-th variable in fixedVariables
+                const requiredBit = (i >> j) & 1;
+
+                if (inputBitForVar !== requiredBit) {
                     matches = false;
                     break;
                 }
@@ -460,6 +463,7 @@ function getSubcodeIndices(monomial) {
 
     return subcodeIndices;
 }
+
 
 // // Modified displaySubcodewordSums function
 // function displaySubcodewordSums(monomial) {
