@@ -423,9 +423,9 @@ function getSubcodeIndices(monomial) {
     
     // This part is correct: identify the variables to fix.
     const allVarIndices = Array.from({ length: numVariables }, (_, i) => i + 1);
-    const fixedVariables = allVarIndices.filter(v => !monomial.includes(v));
+    const variableVariables = allVarIndices.filter(v => !monomial.includes(v));
 
-    const numCosets = 2 ** fixedVariables.length;
+    const numCosets = 2 ** variableVariables.length;
 
     // Loop through all possible assignments for the fixed variables.
     for (let i = 0; i < numCosets; i++) {
@@ -436,9 +436,9 @@ function getSubcodeIndices(monomial) {
             
             // This is the crucial check.
             let matches = true;
-            for (let j = 0; j < fixedVariables.length; j++) {
+            for (let j = 0; j < variableVariables.length; j++) {
                 // Get the variable we are currently fixing (e.g., 1, 2, or 4)
-                const variable = fixedVariables[j]; 
+                const variable = variableVariables[j]; 
                 
                 // Get the value of that variable for the current inputIdx
                 // Note: (numVariables - variable) correctly maps X_1 to MSB, X_4 to LSB
