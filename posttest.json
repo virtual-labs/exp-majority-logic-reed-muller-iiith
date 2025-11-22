@@ -1,0 +1,90 @@
+{
+  "version": 2.0,
+  "questions": [
+    {
+      "question": "An $RM(r, m)$ code has a minimum distance $d_{min} = 2^{m-r}$. What is its error correction capability $t$ for majority logic decoding?",
+      "answers": {
+        "a": "$t = d_{min} - 1$",
+        "b": "$t = d_{min}$",
+        "c": "$t = 2^{m-r}$",
+        "d": "$t = \\lfloor (d_{min}-1)/2 \\rfloor$"
+      },
+      "explanations": {
+        "a": "Incorrect. This is the error detection capability",
+        "b": "Incorrect. A code can detect $d_{min}-1$ errors, but only correct about half that.",
+        "c": "Incorrect. This is just the minimum distance $d_{min}$ itself.",
+        "d": "Correct. This is the general formula for the number of errors a code with minimum distance $d_{min}$ is guaranteed to correct."
+      },
+      "correctAnswer": "d",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "What is the primary algebraic purpose of summing a polynomial's evaluations over a check set $\\mathcal{V}_S(\\mathbf{b})$?",
+      "answers": {
+        "a": "To cancel the contribution of all monomials of degree less than $r = |S|$.",
+        "b": "To find the average value of the polynomial.",
+        "c": "To exclusively isolate the coefficient $a_S$, cancelling all other coefficients.",
+        "d": "To check the parity of the uninvolved variables $\\mathbf{b}$."
+      },
+      "explanations": {
+        "a": "Correct. This fundamental property ensures that in a noiseless setting, the sum over a check set for a degree-$r$ monomial is unaffected by all lower-degree terms, isolating the highest-degree contributions.",
+        "b": "Incorrect. This is not an average, and all calculations are in $\\mathbb{F}_2$.",
+        "c": "Incorrect. This sum can still be influenced by *other* monomials of degree $r$ or higher. The iterative 'peel-off' process handles this.",
+        "d": "Incorrect. The uninvolved variables $\\mathbf{b}$ are *fixed* to define the check set."
+      },
+      "correctAnswer": "a",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "When decoding an $RM(3, 7)$ code, how many disjoint check sets are used to vote for a single degree-3 coefficient (e.g., $\\hat{a}_{123}$)?",
+      "answers": {
+        "a": "8",
+        "b": "16",
+        "c": "32",
+        "d": "4"
+      },
+      "explanations": {
+        "a": "Incorrect. How many assignments are there in the uninvolved variables?",
+        "b": "Correct. The formula is $2^{m-i}$, where $m=7$ and the degree is $i=3$. This gives $2^{7-3} = 2^4 = 16$.",
+        "c": "Incorrect. How many assignments are there in the uninvolved variables?",
+        "d": "Incorrect. Incorrect. How many assignments are there in the uninvolved variables?."
+      },
+      "correctAnswer": "b",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "In the iterative decoding algorithm, what is the purpose of the 'peel off' step (calculating $\\mathbf{Y}_{i-1} = \\mathbf{Y}_i + \\mathbf{C}_i$)?",
+      "answers": {
+        "a": "To add the newly found coefficients $\\hat{f}_i$ to the final polynomial $\\hat{f}$.",
+        "b": "To correct the errors in the working vector $\\mathbf{Y}_i$ before the next stage.",
+        "c": "To find the locations of the errors in the received vector.",
+        "d": "To remove the influence of the just-decoded degree-$i$ terms, so they don't interfere with decoding the lower-degree terms."
+      },
+      "explanations": {
+        "a": "Incorrect. That step is $\\hat{f}(\\mathbf{X}) = \\hat{f}(\\mathbf{X}) + \\hat{f}_i(\\mathbf{X})$. The 'peel off' step updates the working vector.",
+        "b": "Incorrect. The majority vote *within* the stage corrects for the errors. This step prepares the vector for the *next* stage.",
+        "c": "Incorrect. This algorithm finds the coefficients, it does not explicitly find the error locations.",
+        "d": "Correct. The check sums for degree-$(i-1)$ terms would be corrupted by the (now known) degree-$i$ terms if their codeword $\\mathbf{C}_i$ was not subtracted (XORed) out."
+      },
+      "correctAnswer": "d",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "You are decoding an $RM(2, 4)$ vector $\\mathbf{Y}$ (which has $t=1$). For the coefficient $\\hat{a}_{34}$, the four check-sum estimates are $(1, 1, 0, 1)$. What is the decoded coefficient $\\hat{a}_{34}$?",
+      "answers": {
+        "a": "0",
+        "b": "1",
+        "c": "Failure (cannot be determined)",
+        "d": "2"
+      },
+      "explanations": {
+        "a": "Incorrect. The majority of the votes is 1.",
+        "b": "Correct. The algorithm takes the majority vote of the estimates $(1, 1, 0, 1)$, which is 1. This is the algorithm's best estimate for the coefficient.",
+        "c": "Incorrect. The algorithm *always* determines a coefficient by taking the majority; it does not declare failure.",
+        "d": "Incorrect. All coefficients are in $\\mathbb{F}_2$."
+      },
+      "correctAnswer": "b",
+      "difficulty": "intermediate"
+    }
+  ]
+}

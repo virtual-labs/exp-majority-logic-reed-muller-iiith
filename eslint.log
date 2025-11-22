@@ -1,0 +1,25 @@
+
+/home/runner/work/exp-majority-logic-reed-muller-iiith/exp-majority-logic-reed-muller-iiith/experiment/simulation/js/majority_logic.js
+  141:5   warning  'currentPolynomial' is not defined              no-undef
+  146:13  warning  'currentPolynomial' is not defined              no-undef
+  150:42  warning  'currentPolynomial' is not defined              no-undef
+  151:31  warning  'currentPolynomial' is not defined              no-undef
+  207:11  warning  'allInputs' is assigned a value but never used  no-unused-vars
+  226:39  warning  'func' is defined but never used                no-unused-vars
+  349:9   warning  'MathJax' is not defined                        no-undef
+  372:9   warning  'MathJax' is not defined                        no-undef
+
+/home/runner/work/exp-majority-logic-reed-muller-iiith/exp-majority-logic-reed-muller-iiith/experiment/simulation/js/monomial.js
+   12:5   warning  'correctSubcodewordSums' is assigned a value but never used  no-unused-vars
+   13:5   warning  'correctMajorityResult' is assigned a value but never used   no-unused-vars
+  147:43  warning  'correctSubcode' is defined but never used                   no-unused-vars
+  212:9   warning  'MathJax' is not defined                                     no-undef
+  217:10  warning  'checkSubcode' is defined but never used                     no-unused-vars
+  293:10  warning  'resetMajorityDecoder' is defined but never used             no-unused-vars
+  318:10  warning  'nextSubcode' is defined but never used                      no-unused-vars
+  344:10  warning  'indexToBinaryVector' is defined but never used              no-unused-vars
+  349:10  warning  'binaryVectorToIndex' is defined but never used              no-unused-vars
+  354:10  warning  'addVectors' is defined but never used                       no-unused-vars
+
+✖ 18 problems (0 errors, 18 warnings)
+
