@@ -17,6 +17,19 @@
         src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
     <!-- Load d3.js -->
     <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+
+    <style>
+        input[type="radio"] {
+            margin: 0 5px;
+            accent-color: #3273dc; /* Primary color */
+            transform: scale(1.2); /* Slightly larger size */
+        }
+
+        label {
+            margin-right: 15px;
+            font-weight: bold;
+        }
+    </style>
 </head>
 
 <body>
@@ -25,7 +38,7 @@
 
     <div class="columns is-centered">
         <div class="column is-one-quarter v-instruction-title">
-            Channel
+            Majority Logic Decoding
         </div>
         <div class="column">
             <div class="v-tabs">
@@ -51,47 +64,29 @@
             <div class="v-collapsible-instruction-container v-instruction-container">
                 <div class="v-collapsible is-size-5">Instructions</div>
                 <div class="v-content" style="text-align: left; padding-left: 10%; padding-right: 10%;">
-                    <ul style="list-style: disc;">
-                        <b>Quick theory overview:</b>
-                        <li>
-                            <strong>The conditional distribution of AWGN Channel is given by:</strong>
-                            <br>
-                            <p style="text-align: center;">\( p(\boldsymbol{y}|\boldsymbol{x})=\frac{1}{(\pi
-                                N_0)^{n/2}}e^{-\frac{(||\boldsymbol{y}-\boldsymbol{x}||^2)}{N_0}}\)</p>
 
-                            <strong> The estimate of the transmitted codeword is given by:</strong>
-                            <p style="text-align: center;">\(\hat{\boldsymbol{x}}=arg_{\boldsymbol{x}\in{\cal
-                                C}}\max\frac{1}{(\pi
-                                N_0)^{n/2}}e^{-\frac{(||\boldsymbol{y}-\boldsymbol{x}||^2)}{N_0}}=arg_{\boldsymbol{x}\in{\cal
-                                C}}\max\langle\boldsymbol{y},\boldsymbol{x}\rangle\)</p>
-                        </li>
-                    </ul>
                     <br>
                     <ul style="list-style: disc;">
 
                         <b>Procedure:</b>
 
                         <li>
-                            <strong>Step 1:</strong> Enter the likelihoods of \(\boldsymbol{y}\) given codewords and
-                            click on the
-                            "Check" button to verify the likelihoods.
+                            <strong>Step 1:</strong> For the given monomial compute all the check sets. 
                         </li>
                         <li>
-                            <strong>Step 2:</strong> Select the maximum likelihood estimate codeword from the
-                            dropdown.
+                            <strong>Step 2:</strong> For every checkset, compute the XOR of the received vector bits, who's positions are in the check set.
                         </li>
                         <li>
-                            <strong>Step 3:</strong> Click on "Yes" if the maximum likelihood estimate codeword is same
-                            as the transmitted codeword, else click on "No". "Next" button will appear after selecting
-                            the correct option.
+                            <strong>Step 3:</strong> Sum of those XORs would result in a 1, some in a 0. Pick the majority. 
                         <li>
-                            <strong>Step 4:</strong> After clicking on the "Next" button, the next question will appear.
-                            Select all the received vectors that lead to a decoding error when using maximum likelihood
-                            decoding.
+                            <strong>Step 4:</strong> The observations panel would let you know if your choice is wrong. If it correct, move on to the next monomial. 
                         </li>
-
+                        <li>
+                            <strong>Step 5:</strong> Press "Reload" to reload the page and try a new example.
+                        </li>
 
                     </ul>
+                    <br>
                 </div>
             </div>
         </div>
@@ -103,7 +98,7 @@
             <div class="v-datalist-container components-list" id="questionStatement">
                 <p>Consider a received vector :
                 <span id="receivedVector" class="has-text-centered is-size-5"></span> </p> 
-                from the <span id="rmPara" class="has-text-centered is-size-5"></span> code.
+                &nbsp; from the code &nbsp; <span id="rmPara" class="has-text-centered is-size-5"></span> &nbsp; Follow the instructions below to carry through the complete majority logic decoding process, by estimating the coefficients of the monomials, from the largest degree to the smallest, thus estimating the message polynomial.
             </div>
         </div>
     </div>
@@ -112,29 +107,42 @@
         <div class="column is-8-desktop is-12-tablet is-12-mobile">
             <div class="box-question">
                 <section id="majorityQuestion">
-                    <p>Enter the coefficient of the given monomial. </p>
+                    <p> As part of simulating the decoder, you have to estimate the coefficient of the monomial at this point. The input to the decoder (i.e. the current working vector upto this point) is given, as well as the current partially decoded message polynomial is given below. </p>
                     <div class="columns is-centered">
                         <div class="column is-11-desktop is-12-tablet is-12-mobile">
                             <!-- <h2>Reed-Muller Majority Decoder</h2> -->
                             <div id="decodingStatus">
                                 <p>Current vector: <span id="currentVector"></span></p>
-                                <p id="currentDegree"></p>
-                                <p>Current Monomial: <span id="currentMonomial"></span></p>
+                                <!-- <p id="currentDegree"></p> -->
+                                <!-- <p>Current Monomial: <span id="currentMonomial"></span></p> -->
+                            </div>
+                            <div class="current-polynomial">
+                                <p style="color: red;">Current Decoded Polynomial: <span id="decodedPolynomial" ></span></p>
                             </div>
 
-                            <div id="decoding-step">
-                                <p>What is the majority value for the current monomial?</p>
+                            <!-- <div id="decoding-step">
+                                <p>As per the majority logic algorithm, what is the estimate for the coefficient of the current monomial above?</p>
                                 <button class="v-button">0</button>
                                 <button class="v-button">1</button>
-                            </div>
+                            </div> -->
 
+
+                            <div id="decoding-step">
+                                <p>As per the majority logic algorithm, what is the estimate for the coefficient of the current monomial : <span id="currentMonomial" style="color: red;"></span></p>
+                            
+                                <input type="radio" id="choice0" name="majority_choice" value="0">
+                                <label for="choice0">0</label>
+                                <input type="radio" id="choice1" name="majority_choice" value="1">
+                                <label for="choice1">1</label>
+                            
+                                <br>
+                                <button class="v-button" id="submitDecision">Submit</button>
+                                <button class="v-button" id="resetButton">Reload</button>
+                            </div>
                             <!-- <div id="feedback"></div> -->
 
                             <!-- <div id="subcodewordSums"></div> -->
 
-                            <div class="current-polynomial">
-                                <p>Current Decoded Polynomial: <span id="decodedPolynomial"></span></p>
-                            </div>
 
                             <div id="finalResult"></div>
                         </div>

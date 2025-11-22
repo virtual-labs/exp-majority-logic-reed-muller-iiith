@@ -1,1 +1,2 @@
-### Aim of the experiment
+
+The aim of the experiment is to make the user appreciate the nuances of majority logic decoding of Reed-Muller codes. Majority logic decoding of a $RM(r,m)$ code ensures the correction of upto errors numbering upto half-the-minimum distance, i.e., upto $\frac{d_{min}-1}{2}=\frac{2^{m-r}-1}{2}$ bit-flip errors.

@@ -16,7 +16,24 @@ let nextFlagClicked = false; // Flag to track if the next button has been clicke
 
 // color pallette 
 
-const colorPallete = ['#3273dc', '#23d160', '#ffdd57', '#ff3860', '#7950f2', '#20c997', '#fd7e14'];
+const colorPallete = [
+    '#3273dc',
+    '#23d160',
+    '#ffdd57',
+    '#ff3860',
+    '#7950f2',
+    '#20c997',
+    '#fd7e14',
+    '#00d1b2',
+    '#6f42c1',
+    '#f03a5f',
+    '#0047ab',
+    '#6c757d',
+    '#9c1a1f',
+    '#1e7e34',
+    '#a333c8',  
+    '#363636'
+  ];
 let subcodeColorIdx = 0;
 
 // Function to evaluate a Boolean polynomial on all inputs
@@ -227,21 +244,32 @@ function checkSubcode() {
     console.log(subcodewords);
     console.log(selectedVectorIndices);
 
-    const correctPrompt = "Correct! You have selected a correct subcodeword.";
-    const tryAgainPrompt = "Incorrect. Please try again.";
-    const wrongAgainPrompt = "You have selected a wrong subcodeword again. Please try again.";
+    const correctPrompt = "Correct! You have selected a correct check set. Press 'Next' now to go on to find the next check set.";
+    const tryAgainPrompt = "Incorrect check set. Please try again. Remember that, for the given monomial, the check set chosen should be corresponding to a set of coordinates in which the variables not appearing in the monomial are fixed to be specific values.";
+    const wrongAgainPrompt = "You have selected a wrong check set again. Please try again.";
 
     if (allCorrect && nextFlagClicked === false) {
         observations.innerHTML = correctPrompt;
         observations.style.color = "green";
-        // document.getElementById('majorityResult').textContent = correctMajorityResult;
         nextButton.style.display = 'inline-block';
 
-        // freeze the subcode indices by add them to correctSubcode
+        // Freeze the subcode indices by adding them to correctSubcode
         correctSubcode.push(...selectedVectorIndices);
         console.log("Correct subcode:", correctSubcode);
 
-        // flag for keeping track if next button is clicked
+        // Disable the buttons for the selected indices
+        const container = document.getElementById('receivedVector');
+        if (container) {
+            selectedVectorIndices.forEach(index => {
+                const bitElement = container.children[index];
+                if (bitElement) {
+                    bitElement.disabled = true; // Disable the button
+                    bitElement.style.cursor = 'not-allowed'; // Change cursor to indicate disabled state
+                }
+            });
+        }
+
+        // Flag for keeping track if next button is clicked
         nextFlagClicked = true;
 
     }
@@ -267,12 +295,24 @@ function resetMajorityDecoder() {
     correctSubcodewordSums = [];
     correctMajorityResult = 0;
     document.getElementById('observation').textContent = '';
-    // document.getElementById('majorityResult').textContent = '';
     document.getElementById('nextButton').style.display = 'none';
 
-    initializeMajorityDecoder();
-
+    // Clear the interactive codeword display for non-disabled buttons
+    const container = document.getElementById('receivedVector');
+    if (container) {
+        Array.from(container.children).forEach((bitElement, index) => {
+            if (!bitElement.disabled) { // Only clear non-disabled buttons
+                selectedVector[index] = 0;
+                updateBitDisplay(bitElement, 0, correctSubcode[index]);
+            }
+        });
+    }
 }
+
+document.getElementById('reloadButton').addEventListener('click', function () {
+    location.reload();
+});
+
 
 
 function nextSubcode() {
@@ -289,10 +329,12 @@ function nextSubcode() {
     document.getElementById('nextButton').style.display = 'none';
 
     if (subcodeColorIdx === numSubvectors - 1) {
-        document.getElementById('observation').textContent = "You have completed all subcodes for this monomial.";
+        document.getElementById('observation').textContent = "This part of the experiment is over! You have completed finding all check-sums for this monomial. (You didn't have to select the last one, as that is the only one that's left!)";
         document.getElementById('observation').style.color = "green";
         document.getElementById('nextButton').style.display = 'none';
         document.getElementById('checkButton').style.display = 'none';
+    } else{
+        document.getElementById('observation').textContent = 'Select check set and press \'Check\' to check if it is correct';
     }
 
 }
