@@ -10,6 +10,8 @@ let currentVector = [];
 let currentMonomial = [];
 let decodedCoefficients = new Map();
 let currentFunction = [];
+let previousQuestions = [];
+const maxRetries = 10;
 
 // Wait for DOM to be fully loaded
 document.addEventListener('DOMContentLoaded', function () {
@@ -25,9 +27,9 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 // Add event listener for reset button
-document.getElementById('resetButton').addEventListener('click', function () {
-    location.reload();
-});
+// document.getElementById('resetButton').addEventListener('click', function () {
+//     location.reload();
+// });
 
 // Function to evaluate a Boolean polynomial on all inputs
 function evaluatePolynomial(polynomial, inputs) {
@@ -173,34 +175,49 @@ function formatDecodedPolynomial() {
 
 // Initialize the decoder simulation
 function initializeDecoderSimulation() {
-    // Generate random RM codeword by evaluating polynomal 
-    sentVector = generateReedMullerCodeword(maxDegree, numVariables);
-    // flip less than 2^(m-r-1) bits
-    // Calculate the number of bits to flip (less than 2^(m-r-1))
-    const numBitsToFlip = 1;
+    let attempts = 0;
 
-    console.log('Sent vector:', sentVector);
-    console.log('Number of bits to flip:', numBitsToFlip);
+    // Generate a unique receivedVector
+    do {
+        sentVector = generateReedMullerCodeword(maxDegree, numVariables);
 
-    // Make a copy of the sentVector and introduce errors
-    receivedVector = [...sentVector];
-    for (let i = 0; i < numBitsToFlip; i++) {
-        const randomIndex = Math.floor(Math.random() * receivedVector.length);
-        receivedVector[randomIndex] = 1 - receivedVector[randomIndex]; // Flip the bit
+        // Flip less than 2^(m-r-1) bits
+        const numBitsToFlip = 1;
+        receivedVector = [...sentVector];
+        for (let i = 0; i < numBitsToFlip; i++) {
+            const randomIndex = Math.floor(Math.random() * receivedVector.length);
+            receivedVector[randomIndex] = 1 - receivedVector[randomIndex]; // Flip the bit
+        }
+
+        attempts++;
+    } while (previousQuestions.includes(receivedVector.toString()) && attempts < maxRetries);
+
+    if (attempts >= maxRetries) {
+        console.warn("Failed to generate a unique question after multiple attempts. Resetting history.");
+        previousQuestions = []; // Clear history to allow repeats
     }
 
-    // currentFunction = [...receivedVector];
+    // Add the new receivedVector to the history
+    previousQuestions.push(receivedVector.toString());
+
+    // Limit the history size to 10 to avoid memory issues
+    if (previousQuestions.length > 10) {
+        previousQuestions.shift();
+    }
+
+    console.log('Sent vector:', sentVector);
+    console.log('Received vector:', receivedVector);
+
     currentDegree = maxDegree;
     currentStep = 0;
     decodedCoefficients.clear();
-
-    // currentVector = receivedVector make a deep copy
     currentVector = [...receivedVector];
-
 
     // Update UI
     updateUI();
 }
+
+document.getElementById('resetButton').addEventListener('click', initializeDecoderSimulation);
 
 // Compute majority of subcodeword sums for a monomial from current vector
 function computeAllSubcodewordSums(monomial) {

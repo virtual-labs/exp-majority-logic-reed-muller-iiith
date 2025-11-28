@@ -170,11 +170,33 @@ function generateSubcodewordSums(codeword) {
     return subcodewordSums;
 }
 
+let previousQuestions = [];
+const maxRetries = 10;
+
 // Function to initialize the majority decoder interface
 function initializeMajorityDecoder() {
-    degree = Math.floor(Math.random() * (maxDegree + 1));
+    let attempts = 0;
+
+    do {
+        degree = Math.floor(Math.random() * (maxDegree + 1));
+        currentMonomial = generateRandomMonomial(degree);
+        attempts++;
+    } while (previousQuestions.includes(currentMonomial.toString()) && attempts < maxRetries);
+
+    if (attempts >= maxRetries) {
+        console.warn("Failed to generate a unique monomial after multiple attempts. Resetting history.");
+        previousQuestions = []; // Clear history to allow repeats
+    }
+
+    // Add the new monomial to the history
+    previousQuestions.push(currentMonomial.toString());
+
+    // Limit the history size to 10 to avoid memory issues
+    if (previousQuestions.length > 10) {
+        previousQuestions.shift();
+    }
+
     numSubvectors = 2 ** (numVariables - degree);
-    currentMonomial = generateRandomMonomial(degree);
     currentReceivedVector = generateReedMullerCodeword(degree, numVariables);
     const rmPara = document.getElementById('rmPara');
 
@@ -187,25 +209,6 @@ function initializeMajorityDecoder() {
 
     document.getElementById('numSubvectors').textContent = `\\(${numSubvectors}\\)`;
     document.getElementById('monomial').textContent = degree === 0 ? `\\(1\\)` : `\\( X_{${currentMonomial.join('}X_{')}} \\)`;
-
-    // correctSubcodewordSums = generateSubcodewordSums(currentReceivedVector);
-
-    // const inputsContainer = document.querySelector('.subcodeword-inputs');
-    // inputsContainer.innerHTML = '';
-
-    // for (let i = 0; i < numSubvectors; i++) {
-    //     const input = document.createElement('input');
-    //     input.type = 'number';
-    //     input.min = '0';
-    //     input.max = '1';
-    //     input.className = 'subcodeword-input';
-    //     input.style.width = '40px';
-    //     input.style.height = '40px';
-    //     input.style.textAlign = 'center';
-    //     input.style.fontSize = '16px';
-    //     input.id = `subcodeword-${i}`;
-    //     inputsContainer.appendChild(input);
-    // }
 
     // Refresh MathJax rendering
     if (window.MathJax) {
@@ -309,11 +312,8 @@ function resetMajorityDecoder() {
     }
 }
 
-document.getElementById('reloadButton').addEventListener('click', function () {
-    location.reload();
-});
-
-
+// Replace the reload button functionality
+document.getElementById('reloadButton').addEventListener('click', initializeMajorityDecoder);
 
 function nextSubcode() {
     // resetMajorityDecoder();
