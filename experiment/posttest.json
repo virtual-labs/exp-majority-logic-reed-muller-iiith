@@ -2,7 +2,7 @@
   "version": 2.0,
   "questions": [
     {
-      "question": "An $RM(r, m)$ code has a minimum distance $d_{min} = 2^{m-r}$. What is its error correction capability $t$ for majority logic decoding?",
+      "question": "1. An $RM(r, m)$ code has a minimum distance $d_{min} = 2^{m-r}$. What is its error correction capability $t$ for majority logic decoding?",
       "answers": {
         "a": "$t = d_{min} - 1$",
         "b": "$t = d_{min}$",
@@ -19,7 +19,7 @@
       "difficulty": "beginner"
     },
     {
-      "question": "What is the primary algebraic purpose of summing a polynomial's evaluations over a check set $\\mathcal{V}_S(\\mathbf{b})$?",
+      "question": "2. What is the primary algebraic purpose of summing a polynomial's evaluations over a check set $\\mathcal{V}_S(\\mathbf{b})$?",
       "answers": {
         "a": "To cancel the contribution of all monomials of degree less than $r = |S|$.",
         "b": "To find the average value of the polynomial.",
@@ -36,7 +36,7 @@
       "difficulty": "intermediate"
     },
     {
-      "question": "When decoding an $RM(3, 7)$ code, how many disjoint check sets are used to vote for a single degree-3 coefficient (e.g., $\\hat{a}_{123}$)?",
+      "question": "3. When decoding an $RM(3, 7)$ code, how many disjoint check sets are used to vote for a single degree-3 coefficient (e.g., $\\hat{a}_{123}$)?",
       "answers": {
         "a": "8",
         "b": "16",
@@ -53,7 +53,7 @@
       "difficulty": "intermediate"
     },
     {
-      "question": "In the iterative decoding algorithm, what is the purpose of the 'peel off' step (calculating $\\mathbf{Y}_{i-1} = \\mathbf{Y}_i + \\mathbf{C}_i$)?",
+      "question": "4. In the iterative decoding algorithm, what is the purpose of the 'peel off' step (calculating $\\mathbf{Y}_{i-1} = \\mathbf{Y}_i + \\mathbf{C}_i$)?",
       "answers": {
         "a": "To add the newly found coefficients $\\hat{f}_i$ to the final polynomial $\\hat{f}$.",
         "b": "To correct the errors in the working vector $\\mathbf{Y}_i$ before the next stage.",
@@ -70,7 +70,7 @@
       "difficulty": "intermediate"
     },
     {
-      "question": "You are decoding an $RM(2, 4)$ vector $\\mathbf{Y}$ (which has $t=1$). For the coefficient $\\hat{a}_{34}$, the four check-sum estimates are $(1, 1, 0, 1)$. What is the decoded coefficient $\\hat{a}_{34}$?",
+      "question": "5. You are decoding an $RM(2, 4)$ vector $\\mathbf{Y}$ (which has $t=1$). For the coefficient $\\hat{a}_{34}$, the four check-sum estimates are $(1, 1, 0, 1)$. What is the decoded coefficient $\\hat{a}_{34}$?",
       "answers": {
         "a": "0",
         "b": "1",

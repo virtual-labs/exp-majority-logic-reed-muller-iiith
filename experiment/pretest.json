@@ -2,7 +2,7 @@
   "version": 2.0,
   "questions": [
     {
-      "question": "Let $f(X_1, X_2) = X_1X_2 + X_2$ be a Boolean polynomial over $\\mathbb{F}_2$. What is $f(1, 0)$?",
+      "question": "1. Let $f(X_1, X_2) = X_1X_2 + X_2$ be a Boolean polynomial over $\\mathbb{F}_2$. What is $f(1, 0)$?",
       "answers": {
         "a": "0",
         "b": "1",
@@ -19,7 +19,7 @@
       "difficulty": "beginner"
     },
     {
-      "question": "Which of the following best explains why the generator matrix of $RM(1, m)$ has rank $m + 1$?",
+      "question": "2. Which of the following best explains why the generator matrix of $RM(1, m)$ has rank $m + 1$?",
       "answers": {
         "a": "Because there are $m$ linearly independent monomials of degree 1 and one constant term.",
         "b": "Because there are $2^m$ possible evaluation points.",
@@ -36,7 +36,7 @@
       "difficulty": "intermediate"
     },
     {
-      "question": "Let $RM(2,3)$ denote the second-order Reed–Muller code of length 8. Which of the following is *not* a basis monomial of this code?",
+      "question": "3. Let $RM(2,3)$ denote the second-order Reed–Muller code of length 8. Which of the following is *not* a basis monomial of this code?",
       "answers": {
         "a": "$X_1X_2$",
         "b": "$X_2X_3$",
@@ -53,7 +53,7 @@
       "difficulty": "intermediate"
     },
     {
-      "question": "If a codeword of $RM(2,4)$ is obtained by evaluating $f(X_1,X_2,X_3,X_4) = X_1X_2 + X_3X_4 + 1$, how many coordinates equal 1 in this codeword?",
+      "question": "4. If a codeword of $RM(2,4)$ is obtained by evaluating $f(X_1,X_2,X_3,X_4) = X_1X_2 + X_3X_4 + 1$, how many coordinates equal 1 in this codeword?",
       "answers": {
         "a": "4",
         "b": "6",
@@ -70,7 +70,7 @@
       "difficulty": "intermediate"
     },
     {
-      "question": "A specific Reed-Muller code $C = RM(r, 5)$ is known to have a minimum distance $d_{min} = 8$. What is the order $r$ of this code?",
+      "question": "5. A specific Reed-Muller code $C = RM(r, 5)$ is known to have a minimum distance $d_{min} = 8$. What is the order $r$ of this code?",
       "answers": {
         "a": "$r = 1$",
         "b": "$r = 2$",
