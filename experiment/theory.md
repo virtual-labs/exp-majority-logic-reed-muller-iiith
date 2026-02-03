@@ -17,14 +17,14 @@ First, let's define the tools we need:
 - **Monomial Index Set ($S$):** For a monomial $M = \prod_{i \in S} X_i$, the set $S$ contains the indices of the variables present in that monomial. For the monomial $M = X_1X_2$, the index set is $S=\{1,2\}$. The set of uninvolved variable indices is its complement, $S^c=\{3,4\}$.
 
 - **Check Set ($\mathcal{V}_S(\mathbf{b})$):** A check set for the coefficient $a_S$ is a collection of codeword coordinates. It is defined by fixing the values of the uninvolved variables (those with indices in $S^c$) to a constant binary vector $\mathbf{b}$.
-  $$ \mathcal{V}\_S(\mathbf{b}) = \{ \mathbf{v} \in \mathbb{F}\_2^m \mid \text{the components of } \mathbf{v} \text{ corresponding to indices in } S^c \text{ are equal to } \mathbf{b} \} $$
+  $$ \mathcal{V}\_S(\mathbf{b}) = \{ \mathbf{v} \in \mathbb{F}\_2^m \mid \text{the components of } \mathbf{v} \text{ corresponding to indices in } S^c \text{ are equal to } \mathbf{b} \} \tag{1}$$
 
 When we sum the evaluations of a polynomial $f(\mathbf{X})$ over a check set, a fundamental property of Boolean algebra ensures that any monomial with degree less than the size of the set (here, degree $< r$) will evaluate to one an even number of times. Thus, its sum is zero in $\mathbb{F}_2$. The only term that may have a non-zero sum is the highest-degree monomial matching the variables of the check set. This allows us to isolate its coefficient.
 
 ##### Example: Finding $a_{12}$ in a Noiseless $RM(2,4)$ Codeword
 
 Let the message polynomial be $f(\mathbf{X}) = X_1X_2 + X_3$. Its noiseless codeword is:
-$\mathbf{C} = (0,0,1,1, \ 0,0,1,1, \ 0,0,1,1, \ 1,1,0,0)$
+$\mathbf{C} = (0,0,1,1, \ 0,0,1,1, \ 0,0,1,1, \ 1,1,0,0)$.
 
 To find the coefficient $a_{12}$, we can use any check set for this monomial. Let's choose the one where the uninvolved variables $(X_3, X_4)$ are fixed to $\mathbf{b}=(0,0)$. The check set is $\mathcal{V}_{12}(0,0) = \{(0000), (0100), (1000), (1100)\}$. The check sum is:
 $$ \text{Sum} = C*{(0000)} + C*{(0100)} + C*{(1000)} + C*{(1100)} = 0 + 0 + 0 + 1 = 1 $$
@@ -63,7 +63,7 @@ The full decoding algorithm is an iterative process that decodes coefficients in
 2.  **Form Degree-$i$ Polynomial:**
 
     - Construct the polynomial containing all the just-decoded terms of degree $i$:
-      $$ \hat{f}_i(\mathbf{X}) = \sum_{|S|=i} \hat{a}\_S M_S $$
+      $$ \hat{f}_i(\mathbf{X}) = \sum_{|S|=i} \hat{a}\_S M_S. \tag{2} $$
 
 3.  **Update Final Polynomial:**
 
@@ -73,7 +73,7 @@ The full decoding algorithm is an iterative process that decodes coefficients in
 
     - Generate the codeword for the degree-$i$ polynomial: $\mathbf{C}_i = \text{Eval}(\hat{f}_i)$.
     - Create the working vector for the next lower degree by subtracting this contribution (using XOR):
-      $$ \mathbf{Y}\_{i-1} = \mathbf{Y}\_i + \mathbf{C}\_i $$
+      $$ \mathbf{Y}\_{i-1} = \mathbf{Y}\_i + \mathbf{C}\_i, \tag{3} $$
 
 5.  **Decrement:**
     - Set $i = i - 1$ and repeat the loop until all degrees down to 0 have been processed.
@@ -83,7 +83,7 @@ The full decoding algorithm is an iterative process that decodes coefficients in
 #### A Detailed Example: Full Decoding of an RM(2,4) Vector
 
 Let's apply the general algorithm to our example. Suppose a single error flips the first bit of the codeword for $f(\mathbf{X}) = X_1X_2 + X_3$. The received vector is:
-$\mathbf{Y} = (\textbf{1},0,1,1, \ 0,0,1,1, \ 0,0,1,1, \ 1,1,0,0)$
+$\mathbf{Y} = (\textbf{1},0,1,1, \ 0,0,1,1, \ 0,0,1,1, \ 1,1,0,0)$.
 
 ##### **Stage 1: Decode Degree 2 (i=2)**
 
@@ -171,4 +171,4 @@ We now use $\mathbf{Y}_1$ to decode degree-1 coefficients. We are targeting an $
 ##### **Final Result:**
 
 By summing the polynomials from each stage, we reconstruct the original message:
-$$ \hat{f}(\mathbf{X}) = \hat{f}\_2(\mathbf{X}) + \hat{f}\_1(\mathbf{X}) + \hat{f}\_0(\mathbf{X}) = X_1X_2 + X_3 + 0 = X_1X_2 + X_3 $$
+$$ \hat{f}(\mathbf{X}) = \hat{f}\_2(\mathbf{X}) + \hat{f}\_1(\mathbf{X}) + \hat{f}\_0(\mathbf{X}) = X_1X_2 + X_3 + 0 = X_1X_2 + X_3 .$$
