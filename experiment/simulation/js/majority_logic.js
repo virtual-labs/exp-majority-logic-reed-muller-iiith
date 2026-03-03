@@ -10,6 +10,8 @@ let currentVector = [];
 let currentMonomial = [];
 let decodedCoefficients = new Map();
 let currentFunction = [];
+let previousQuestions = [];
+const maxRetries = 10;
 
 // Wait for DOM to be fully loaded
 document.addEventListener('DOMContentLoaded', function () {
@@ -25,9 +27,9 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 // Add event listener for reset button
-document.getElementById('resetButton').addEventListener('click', function () {
-    location.reload();
-});
+// document.getElementById('resetButton').addEventListener('click', function () {
+//     location.reload();
+// });
 
 // Function to evaluate a Boolean polynomial on all inputs
 function evaluatePolynomial(polynomial, inputs) {
@@ -50,20 +52,22 @@ function evaluatePolynomial(polynomial, inputs) {
     return codeword;
 }
 
-// Function to generate all possible inputs
+// THE CORRECTED VERSION Update Nov 20
 function generateAllInputs(numVars) {
     const inputs = [];
     const total = 2 ** numVars;
 
     for (let i = 0; i < total; i++) {
         const input = [];
-        for (let j = 0; j < numVars; j++) {
+        // Loop backwards from MSB (j=3) to LSB (j=0)
+        for (let j = numVars - 1; j >= 0; j--) { 
             input.push((i >> j) & 1);
         }
         inputs.push(input);
     }
     return inputs;
 }
+
 
 // Function to evaluate monomial for a given input vector
 function evaluateMonomial(monomial, input) {
@@ -171,31 +175,49 @@ function formatDecodedPolynomial() {
 
 // Initialize the decoder simulation
 function initializeDecoderSimulation() {
-    // Generate random RM codeword by evaluating polynomal 
-    sentVector = generateReedMullerCodeword(maxDegree, numVariables);
-    // flip less than 2^(m-r-1) bits
-    // Calculate the number of bits to flip (less than 2^(m-r-1))
-    const numBitsToFlip = Math.floor(Math.random() * (1 << (numVariables - maxDegree - 1)));
+    let attempts = 0;
 
-    // Make a copy of the sentVector and introduce errors
-    receivedVector = [...sentVector];
-    for (let i = 0; i < numBitsToFlip; i++) {
-        const randomIndex = Math.floor(Math.random() * receivedVector.length);
-        receivedVector[randomIndex] = 1 - receivedVector[randomIndex]; // Flip the bit
+    // Generate a unique receivedVector
+    do {
+        sentVector = generateReedMullerCodeword(maxDegree, numVariables);
+
+        // Flip less than 2^(m-r-1) bits
+        const numBitsToFlip = 1;
+        receivedVector = [...sentVector];
+        for (let i = 0; i < numBitsToFlip; i++) {
+            const randomIndex = Math.floor(Math.random() * receivedVector.length);
+            receivedVector[randomIndex] = 1 - receivedVector[randomIndex]; // Flip the bit
+        }
+
+        attempts++;
+    } while (previousQuestions.includes(receivedVector.toString()) && attempts < maxRetries);
+
+    if (attempts >= maxRetries) {
+        console.warn("Failed to generate a unique question after multiple attempts. Resetting history.");
+        previousQuestions = []; // Clear history to allow repeats
     }
 
-    // currentFunction = [...receivedVector];
+    // Add the new receivedVector to the history
+    previousQuestions.push(receivedVector.toString());
+
+    // Limit the history size to 10 to avoid memory issues
+    if (previousQuestions.length > 10) {
+        previousQuestions.shift();
+    }
+
+    console.log('Sent vector:', sentVector);
+    console.log('Received vector:', receivedVector);
+
     currentDegree = maxDegree;
     currentStep = 0;
     decodedCoefficients.clear();
-
-    // currentVector = receivedVector make a deep copy
     currentVector = [...receivedVector];
-
 
     // Update UI
     updateUI();
 }
+
+document.getElementById('resetButton').addEventListener('click', initializeDecoderSimulation);
 
 // Compute majority of subcodeword sums for a monomial from current vector
 function computeAllSubcodewordSums(monomial) {
@@ -261,7 +283,7 @@ function checkMajorityDecision(userDecision) {
     const observation = document.getElementById('observation');
 
     const correctPrompt = `Yes, the majority of the subcodeword sums for the monomial ${formatMonomial(currentMonomial)} is ${correctMajority}.`;
-    const incorrectPrompt = `No, you have selected the wrong majority for the subcodeword sums for the monomial ${formatMonomial(currentMonomial)}.`;
+    const incorrectPrompt = `No, you have selected the wrong majority for the subcodeword sums (a subcodeword sum is a sum of bits of each check set) for the monomial ${formatMonomial(currentMonomial)}. Try again, if necessary, study the theory part and repeat part-1 of this experiment once more, before trying again.`;
     const repeatPrompt = `Please try again!`;
 
     console.log('User decision:', parseInt(userDecision));
@@ -328,7 +350,7 @@ function updateUI() {
     const decodedPolynomialEl = document.getElementById('decodedPolynomial');
     const rmParaEl = document.getElementById('rmPara');
 
-    rmParaEl.innerHTML = `\\( RM(${currentDegree}, ${numVariables}) \\)`;
+    rmParaEl.innerHTML = `\\( RM(${maxDegree}, ${numVariables}) \\)`;
 
     if (receivedVectorEl) receivedVectorEl.innerHTML = ` \\( \\mathbf{r} = (${receivedVector.join(',')})\\)`;
     if (currentVector) currentVectorEl.innerHTML = `\\(\\mathbf{y'} = (${currentVector.join(',')}) \\)`;
@@ -359,7 +381,7 @@ function displayFinalResults() {
     if (finalResultEl) {
         finalResultEl.innerHTML = `
             <h3>Decoding Complete!</h3>
-            <p>Final decoded polynomial: ${formatDecodedPolynomial()}</p>
+            <p style="color:red;">Final decoded polynomial: ${formatDecodedPolynomial()}</p>
         `;
     }
 
@@ -369,31 +391,81 @@ function displayFinalResults() {
 }
 
 
+// function getSubcodeIndices(monomial) {
+//     const subcodeIndices = [];
+
+//     // For a single variable monomial X_i, we need to partition based on all other variables
+//     // For X4, we should fix variables {1,2,3} in all possible combinations
+//     // const fixedVariables = Array.from({ length: numVariables }, (_, i) => i + 1)
+//     //     .filter(x => !monomial.includes(x));
+
+//     const fixedVariables = monomial;
+
+//     // For X4, with 4 variables total, we should get 2^3 = 8 cosets
+//     // Because we're fixing 3 variables (1,2,3) in all possible combinations
+//     const numCosets = 2 ** fixedVariables.length;
+
+//     // Generate binary patterns for fixed variables
+//     for (let i = 0; i < numCosets; i++) {
+//         let fixedPattern = i.toString(2).padStart(fixedVariables.length, '0').split('').map(Number);
+//         let subvector = [];
+
+//         // Go through all possible input vectors (16 for 4 variables)
+//         for (let inputIdx = 0; inputIdx < 2 ** numVariables; inputIdx++) {
+//             let inputVector = inputIdx.toString(2).padStart(numVariables, '0').split('').map(Number);
+
+//             // Check if this input matches our fixed pattern for variables 1,2,3
+//             let matches = true;
+//             for (let j = 0; j < fixedVariables.length; j++) {
+//                 if (inputVector[fixedVariables[j] - 1] !== fixedPattern[j]) {
+//                     matches = false;
+//                     break;
+//                 }
+//             }
+
+//             if (matches) {
+//                 subvector.push(inputIdx);
+//             }
+//         }
+
+//         subcodeIndices.push(subvector);
+//     }
+
+//     return subcodeIndices;
+// }
+
+//Update below on 20th Nov
 function getSubcodeIndices(monomial) {
     const subcodeIndices = [];
+    
+    // This part is correct: identify the variables to fix.
+    const allVarIndices = Array.from({ length: numVariables }, (_, i) => i + 1);
+    const variableVariables = allVarIndices.filter(v => !monomial.includes(v));
 
-    // For a single variable monomial X_i, we need to partition based on all other variables
-    // For X4, we should fix variables {1,2,3} in all possible combinations
-    const fixedVariables = Array.from({ length: numVariables }, (_, i) => i + 1)
-        .filter(x => !monomial.includes(x));
+    const numCosets = 2 ** variableVariables.length;
 
-    // For X4, with 4 variables total, we should get 2^3 = 8 cosets
-    // Because we're fixing 3 variables (1,2,3) in all possible combinations
-    const numCosets = 2 ** fixedVariables.length;
-
-    // Generate binary patterns for fixed variables
+    // Loop through all possible assignments for the fixed variables.
     for (let i = 0; i < numCosets; i++) {
-        let fixedPattern = i.toString(2).padStart(fixedVariables.length, '0').split('').map(Number);
         let subvector = [];
 
-        // Go through all possible input vectors (16 for 4 variables)
-        for (let inputIdx = 0; inputIdx < 2 ** numVariables; inputIdx++) {
-            let inputVector = inputIdx.toString(2).padStart(numVariables, '0').split('').map(Number);
-
-            // Check if this input matches our fixed pattern for variables 1,2,3
+        // Go through all 16 possible input vectors
+        for (let inputIdx = 0; inputIdx < codeLength; inputIdx++) {
+            
+            // This is the crucial check.
             let matches = true;
-            for (let j = 0; j < fixedVariables.length; j++) {
-                if (inputVector[fixedVariables[j] - 1] !== fixedPattern[j]) {
+            for (let j = 0; j < variableVariables.length; j++) {
+                // Get the variable we are currently fixing (e.g., 1, 2, or 4)
+                const variable = variableVariables[j]; 
+                
+                // Get the value of that variable for the current inputIdx
+                // Note: (numVariables - variable) correctly maps X_1 to MSB, X_4 to LSB
+                const inputBitForVar = (inputIdx >> (numVariables - variable)) & 1;
+
+                // Get the required value for this variable from our counter 'i'
+                // The j-th bit of 'i' corresponds to the j-th variable in fixedVariables
+                const requiredBit = (i >> j) & 1;
+
+                if (inputBitForVar !== requiredBit) {
                     matches = false;
                     break;
                 }
@@ -403,7 +475,6 @@ function getSubcodeIndices(monomial) {
                 subvector.push(inputIdx);
             }
         }
-
         subcodeIndices.push(subvector);
     }
 

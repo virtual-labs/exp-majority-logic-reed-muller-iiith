@@ -170,11 +170,33 @@ function generateSubcodewordSums(codeword) {
     return subcodewordSums;
 }
 
+let previousQuestions = [];
+const maxRetries = 10;
+
 // Function to initialize the majority decoder interface
 function initializeMajorityDecoder() {
-    degree = Math.floor(Math.random() * (maxDegree + 1));
+    let attempts = 0;
+
+    do {
+        degree = Math.floor(Math.random() * (maxDegree + 1));
+        currentMonomial = generateRandomMonomial(degree);
+        attempts++;
+    } while (previousQuestions.includes(currentMonomial.toString()) && attempts < maxRetries);
+
+    if (attempts >= maxRetries) {
+        console.warn("Failed to generate a unique monomial after multiple attempts. Resetting history.");
+        previousQuestions = []; // Clear history to allow repeats
+    }
+
+    // Add the new monomial to the history
+    previousQuestions.push(currentMonomial.toString());
+
+    // Limit the history size to 10 to avoid memory issues
+    if (previousQuestions.length > 10) {
+        previousQuestions.shift();
+    }
+
     numSubvectors = 2 ** (numVariables - degree);
-    currentMonomial = generateRandomMonomial(degree);
     currentReceivedVector = generateReedMullerCodeword(degree, numVariables);
     const rmPara = document.getElementById('rmPara');
 
@@ -187,25 +209,6 @@ function initializeMajorityDecoder() {
 
     document.getElementById('numSubvectors').textContent = `\\(${numSubvectors}\\)`;
     document.getElementById('monomial').textContent = degree === 0 ? `\\(1\\)` : `\\( X_{${currentMonomial.join('}X_{')}} \\)`;
-
-    // correctSubcodewordSums = generateSubcodewordSums(currentReceivedVector);
-
-    // const inputsContainer = document.querySelector('.subcodeword-inputs');
-    // inputsContainer.innerHTML = '';
-
-    // for (let i = 0; i < numSubvectors; i++) {
-    //     const input = document.createElement('input');
-    //     input.type = 'number';
-    //     input.min = '0';
-    //     input.max = '1';
-    //     input.className = 'subcodeword-input';
-    //     input.style.width = '40px';
-    //     input.style.height = '40px';
-    //     input.style.textAlign = 'center';
-    //     input.style.fontSize = '16px';
-    //     input.id = `subcodeword-${i}`;
-    //     inputsContainer.appendChild(input);
-    // }
 
     // Refresh MathJax rendering
     if (window.MathJax) {
@@ -244,21 +247,32 @@ function checkSubcode() {
     console.log(subcodewords);
     console.log(selectedVectorIndices);
 
-    const correctPrompt = "Correct! You have selected a correct subcodeword.";
-    const tryAgainPrompt = "Incorrect. Please try again.";
-    const wrongAgainPrompt = "You have selected a wrong subcodeword again. Please try again.";
+    const correctPrompt = "Correct! You have selected a correct check set. Press 'Next' now to go on to find the next check set.";
+    const tryAgainPrompt = "Incorrect check set. Please try again. Remember that, for the given monomial, the check set chosen should be corresponding to a set of coordinates in which the variables not appearing in the monomial are fixed to be specific values.";
+    const wrongAgainPrompt = "You have selected a wrong check set again. Please try again.";
 
     if (allCorrect && nextFlagClicked === false) {
         observations.innerHTML = correctPrompt;
         observations.style.color = "green";
-        // document.getElementById('majorityResult').textContent = correctMajorityResult;
         nextButton.style.display = 'inline-block';
 
-        // freeze the subcode indices by add them to correctSubcode
+        // Freeze the subcode indices by adding them to correctSubcode
         correctSubcode.push(...selectedVectorIndices);
         console.log("Correct subcode:", correctSubcode);
 
-        // flag for keeping track if next button is clicked
+        // Disable the buttons for the selected indices
+        const container = document.getElementById('receivedVector');
+        if (container) {
+            selectedVectorIndices.forEach(index => {
+                const bitElement = container.children[index];
+                if (bitElement) {
+                    bitElement.disabled = true; // Disable the button
+                    bitElement.style.cursor = 'not-allowed'; // Change cursor to indicate disabled state
+                }
+            });
+        }
+
+        // Flag for keeping track if next button is clicked
         nextFlagClicked = true;
 
     }
@@ -284,13 +298,22 @@ function resetMajorityDecoder() {
     correctSubcodewordSums = [];
     correctMajorityResult = 0;
     document.getElementById('observation').textContent = '';
-    // document.getElementById('majorityResult').textContent = '';
     document.getElementById('nextButton').style.display = 'none';
 
-    initializeMajorityDecoder();
-
+    // Clear the interactive codeword display for non-disabled buttons
+    const container = document.getElementById('receivedVector');
+    if (container) {
+        Array.from(container.children).forEach((bitElement, index) => {
+            if (!bitElement.disabled) { // Only clear non-disabled buttons
+                selectedVector[index] = 0;
+                updateBitDisplay(bitElement, 0, correctSubcode[index]);
+            }
+        });
+    }
 }
 
+// Replace the reload button functionality
+document.getElementById('reloadButton').addEventListener('click', initializeMajorityDecoder);
 
 function nextSubcode() {
     // resetMajorityDecoder();
@@ -306,10 +329,12 @@ function nextSubcode() {
     document.getElementById('nextButton').style.display = 'none';
 
     if (subcodeColorIdx === numSubvectors - 1) {
-        document.getElementById('observation').textContent = "You have completed all subcodes for this monomial.";
+        document.getElementById('observation').textContent = "This part of the experiment is over! You have completed finding all check-sums for this monomial. (You didn't have to select the last one, as that is the only one that's left!)";
         document.getElementById('observation').style.color = "green";
         document.getElementById('nextButton').style.display = 'none';
         document.getElementById('checkButton').style.display = 'none';
+    } else{
+        document.getElementById('observation').textContent = 'Select check set and press \'Check\' to check if it is correct';
     }
 
 }
